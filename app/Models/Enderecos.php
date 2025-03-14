@@ -18,7 +18,6 @@ class Enderecos extends Model
         'cidade',
         'estado',
         'cep',
-        'pais'
     ];
 
 }
