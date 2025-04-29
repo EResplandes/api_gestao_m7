@@ -15,6 +15,13 @@ Route::prefix('cadastro-amigo')->group(function () {
 
 Route::prefix('autenticacao')->group(function () {
     Route::controller(AutenticacaoController::class)->group(function () {
-        Route::post('/login', 'login')->middleware('throttle:10,1');
+        Route::post('/login', 'login')->middleware('throttle:10,1')->name('login');
+    })->middleware('cors');
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/verifica-token', function (Request $request) {
+            return response()->json(['message' => 'Token Valido']);
+        });
     });
+
 });

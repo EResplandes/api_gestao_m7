@@ -15,11 +15,11 @@ class EleitoresService
         $this->eleitoresRepositories = $eleitoresRepositories;
     }
 
-    public function cadastrarEleitor($request, $idPadrinho)
+    public function cadastrarEleitor($request)
     {
         try {
 
-            $validaPadrinho = $this->eleitoresRepositories->validaPadrinho($idPadrinho);
+            $validaPadrinho = $this->eleitoresRepositories->validaPadrinho($request->padrinho_id);
 
             if (!$validaPadrinho) {
                 return response()->json([
@@ -28,7 +28,9 @@ class EleitoresService
                 ], Response::HTTP_BAD_REQUEST);
             }
 
-            $cadastrarEleitor = $this->eleitoresRepositories->cadastrarEleitor($request, $idPadrinho);
+            $cadastrarEleitor = $this->eleitoresRepositories->cadastrarEleitor($request, $request->padrinho_id);
+
+            dd($cadastrarEleitor);
 
             if ($cadastrarEleitor) {
                 return response()->json([
@@ -79,7 +81,6 @@ class EleitoresService
                     'status' => Response::HTTP_BAD_REQUEST,
                 ], Response::HTTP_CREATED);
             }
-            
         } catch (\Throwable $th) {
             throw $th;
 
@@ -88,6 +89,5 @@ class EleitoresService
                 'status' => Response::HTTP_BAD_REQUEST,
             ], Response::HTTP_CREATED);
         }
-
     }
 }

@@ -25,12 +25,17 @@ class AutenticacaoService
             $credenciais = $request->only(['email', 'senha']);
             if (Auth::attempt(['email' => $credenciais['email'], 'password' => $credenciais['senha']]) && $validate) {
                 $user = Auth::user();
-                return response()->json([
-                    'message' => 'Login efetuado com sucesso',
-                    'token' => bcrypt($user->createToken('auth_token')->plainTextToken),
-                ]);
-            } else {
 
+                // Validando se usuário está ativo
+                if ($user->status == 3) {
+                    return response()->json(['message' => 'Usuário inativo'], 401);
+                }
+
+                $token = $user->createToken('auth_token')->plainTextToken; // Gerando Token
+
+                return response()->json(['message' => 'Login efetuado com sucesso'])
+                    ->withCookie(cookie('token', $token, 60, '/', null, true, true, false, 'Lax'));  // Salvar token como cookie
+            } else {
                 if ($validate) {
                     return response()->json(['message' => 'Credenciais inválidas'], 401);
                 } else {

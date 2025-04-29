@@ -72,11 +72,11 @@ class User extends Authenticatable
 
     public function status()
     {
-        return $this->belongsTo(Status::class, 'statusId');
+        return $this->belongsTo(StatusUsuario::class, 'statusId');
     }
 
     public function gabinete()
     {
-        return $this->belongsTo(Gabinete::class, 'gabineteId');
+        return $this->belongsTo(Gabinetes::class, 'gabineteId');
     }
 }
